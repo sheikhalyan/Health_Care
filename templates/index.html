@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Healthcare Translation App</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
+    <!-- Error Message -->
+    <div id="errorMessage" class="fixed top-4 right-4 bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg hidden transform transition-transform duration-300 z-50"></div>
+
+    <div class="container mx-auto px-4 py-8">
+        <div class="max-w-5xl mx-auto">
+            <!-- Header -->
+            <div class="text-center mb-12">
+                <h1 class="text-4xl font-bold text-indigo-800 mb-4">Healthcare Translation App</h1>
+                <p class="text-gray-600">Real-time medical translation powered by AI</p>
+            </div>
+            
+            <!-- Language Selection -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                <div class="bg-white p-6 rounded-xl shadow-lg">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Source Language</label>
+                    <select id="sourceLang" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                        {% for code, name in languages.items() %}
+                        <option value="{{ code }}">{{ name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-lg">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Target Language</label>
+                    <select id="targetLang" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                        {% for code, name in languages.items() %}
+                        <option value="{{ code }}">{{ name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <!-- Voice Controls -->
+            <div class="bg-white p-6 rounded-xl shadow-lg mb-8">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-4">
+                        <button id="startRecording" class="bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors duration-200">
+                            Start Recording
+                        </button>
+                        <button id="stopRecording" class="bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-colors duration-200" disabled>
+                            Stop Recording
+                        </button>
+                    </div>
+                    <div id="recordingIndicator" class="hidden flex items-center space-x-2">
+                        <div class="recording-indicator"></div>
+                        <span class="text-sm text-gray-600">Recording...</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Transcripts -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Original Text -->
+                <div class="bg-white p-6 rounded-xl shadow-lg">
+                    <h2 class="text-xl font-semibold text-gray-800 mb-4">Original Text</h2>
+                    <div id="originalText" class="transcript-box p-4 bg-gray-50 rounded-lg border border-gray-200"></div>
+                </div>
+
+                <!-- Translated Text -->
+                <div class="bg-white p-6 rounded-xl shadow-lg">
+                    <h2 class="text-xl font-semibold text-gray-800 mb-4">Translated Text</h2>
+                    <div class="relative">
+                        <div id="translatedText" class="transcript-box p-4 bg-gray-50 rounded-lg border border-gray-200"></div>
+                        <div id="translationLoader" class="hidden absolute inset-0 bg-white bg-opacity-75 flex items-center justify-center">
+                            <div class="loading-spinner"></div>
+                        </div>
+                    </div>
+                    <button id="speakTranslation" class="mt-4 bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
+                        Speak Translation
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/translation.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/speech.js') }}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const translationService = new TranslationService();
+            const speechHandler = new SpeechHandler(translationService);
+
+            document.getElementById('startRecording').addEventListener('click', () => 
+                speechHandler.startRecording());
+            document.getElementById('stopRecording').addEventListener('click', () => 
+                speechHandler.stopRecording());
+            document.getElementById('speakTranslation').addEventListener('click', () => 
+                speechHandler.speakTranslation());
+        });
+    </script>
+</body>
+</html>
