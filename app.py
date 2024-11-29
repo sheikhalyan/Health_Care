@@ -2,8 +2,7 @@ from flask import Flask, render_template, request, jsonify, url_for
 from flask_socketio import SocketIO, emit
 import os
 from dotenv import load_dotenv
-import openai
-import json
+from googletrans import Translator
 from datetime import datetime
 
 # Load environment variables from .env file
@@ -18,17 +17,13 @@ app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'your-secret-key')
 # Initialize Flask-SocketIO for real-time communication
 socketio = SocketIO(app, cors_allowed_origins="*")
 
-# Set OpenAI API key
-openai.api_key = os.getenv('OPENAI_API_KEY')
-
-#dictionary for supported languages
-
+# Dictionary for supported languages
 SUPPORTED_LANGUAGES = {
     'en': 'English',
     'es': 'Spanish',
     'fr': 'French',
     'de': 'German',
-    'zh': 'Chinese',
+    'zh-cn': 'Chinese',
     'ja': 'Japanese',
     'ar': 'Arabic',
     'hi': 'Hindi',
@@ -36,31 +31,15 @@ SUPPORTED_LANGUAGES = {
     'ru': 'Russian'
 }
 
+# Initialize the Google Translate API
+translator = Translator()
 
-# Function to perform medical translations
-
+# Function to perform translations using Google Translate
 def get_medical_translation(text, source_lang, target_lang):
     try:
-        system_prompt = f"""You are a highly skilled medical translator with expertise in both {SUPPORTED_LANGUAGES[source_lang]} 
-        and {SUPPORTED_LANGUAGES[target_lang]} medical terminology. Translate the following text while:
-        1. Maintaining medical accuracy
-        2. Preserving technical terms
-        3. Ensuring cultural appropriateness
-        4. Keeping the same level of formality"""
-
-        # API call to OpenAI ChatCompletion
-
-        response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",   # Model for translation
-            messages=[
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": text}
-            ],
-            temperature=0.3  # Lower temperature for more consistent translations
-        )
-
-        # Return the translated content
-        return response.choices[0].message.content
+        # Perform translation using Google Translate
+        translation = translator.translate(text, src=source_lang, dest=target_lang)
+        return translation.text
     except Exception as e:
         raise Exception(f"Translation error: {str(e)}")
 
