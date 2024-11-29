@@ -16,10 +16,10 @@
         <div class="max-w-5xl mx-auto">
             <!-- Header -->
             <div class="text-center mb-12">
-                <h1 class="text-4xl font-bold text-indigo-800 mb-4">Healthcare Translation App</h1>
-                <p class="text-gray-600">Real-time medical translation powered by AI</p>
+                <h1 class="text-3xl sm:text-4xl font-bold text-indigo-800 mb-4">Healthcare Translation App</h1>
+                <p class="text-sm sm:text-base text-gray-600">Real-time medical translation powered by AI</p>
             </div>
-            
+
             <!-- Language Selection -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                 <div class="bg-white p-6 rounded-xl shadow-lg">
@@ -42,41 +42,41 @@
             </div>
 
             <!-- Voice Controls -->
+             <!-- Voice Controls -->
             <div class="bg-white p-6 rounded-xl shadow-lg mb-8">
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center space-x-4">
-                        <button id="startRecording" class="bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors duration-200">
-                            Start Recording
-                        </button>
-                        <button id="stopRecording" class="bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-colors duration-200" disabled>
-                            Stop Recording
-                        </button>
-                    </div>
-                    <div id="recordingIndicator" class="hidden flex items-center space-x-2">
-                        <div class="recording-indicator"></div>
-                        <span class="text-sm text-gray-600">Recording...</span>
-                    </div>
+                <div class="flex flex-col sm:flex-row items-center justify-center sm:space-x-4 space-y-4 sm:space-y-0">
+                    <button id="startRecording" class="bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition duration-200 w-full sm:w-auto">
+                        Start Recording
+                    </button>
+                    <button id="stopRecording" class="bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition duration-200 w-full sm:w-auto" disabled>
+                        Stop Recording
+                    </button>
+                </div>
+                <div id="recordingIndicator" class="hidden flex items-center space-x-2 mt-4 sm:mt-0">
+                    <div class="recording-indicator"></div>
+                    <span class="text-sm text-gray-600">Recording...</span>
                 </div>
             </div>
+
 
             <!-- Transcripts -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <!-- Original Text -->
                 <div class="bg-white p-6 rounded-xl shadow-lg">
-                    <h2 class="text-xl font-semibold text-gray-800 mb-4">Original Text</h2>
+                    <h2 class="text-lg sm:text-xl font-semibold text-gray-800 mb-4">Original Text</h2>
                     <div id="originalText" class="transcript-box p-4 bg-gray-50 rounded-lg border border-gray-200"></div>
                 </div>
 
                 <!-- Translated Text -->
                 <div class="bg-white p-6 rounded-xl shadow-lg">
-                    <h2 class="text-xl font-semibold text-gray-800 mb-4">Translated Text</h2>
+                    <h2 class="text-lg sm:text-xl font-semibold text-gray-800 mb-4">Translated Text</h2>
                     <div class="relative">
                         <div id="translatedText" class="transcript-box p-4 bg-gray-50 rounded-lg border border-gray-200"></div>
                         <div id="translationLoader" class="hidden absolute inset-0 bg-white bg-opacity-75 flex items-center justify-center">
                             <div class="loading-spinner"></div>
                         </div>
                     </div>
-                    <button id="speakTranslation" class="mt-4 bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
+                    <button id="speakTranslation" class="mt-4 bg-green-600 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
                         Speak Translation
                     </button>
                 </div>
@@ -91,11 +91,11 @@
             const translationService = new TranslationService();
             const speechHandler = new SpeechHandler(translationService);
 
-            document.getElementById('startRecording').addEventListener('click', () => 
+            document.getElementById('startRecording').addEventListener('click', () =>
                 speechHandler.startRecording());
-            document.getElementById('stopRecording').addEventListener('click', () => 
+            document.getElementById('stopRecording').addEventListener('click', () =>
                 speechHandler.stopRecording());
-            document.getElementById('speakTranslation').addEventListener('click', () => 
+            document.getElementById('speakTranslation').addEventListener('click', () =>
                 speechHandler.speakTranslation());
         });
     </script>
