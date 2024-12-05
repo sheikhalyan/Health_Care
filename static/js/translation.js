@@ -53,6 +53,11 @@ class TranslationService {
         return text.split('\n').map(line => `<p class="mb-2">${line}</p>`).join('');
     }
 
+
+
+
+
+
     // Display an error message to the user
     showError(message) {
         const errorDiv = document.getElementById('errorMessage');

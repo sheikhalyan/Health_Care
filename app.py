@@ -15,7 +15,7 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'your-secret-key')
 
 # Initialize Flask-SocketIO for real-time communication
-socketio = SocketIO(app, cors_allowed_origins="*")
+socketio = SocketIO(app, cors_allowed_origins="*")   # "*" => Allows WebSocket connections from any origin
 
 # Dictionary for supported languages
 SUPPORTED_LANGUAGES = {

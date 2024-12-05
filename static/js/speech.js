@@ -4,8 +4,8 @@ class SpeechHandler {
         this.translationService = translationService;
 
         // Initialize properties for speech recognition and recording state
-        this.recognition = null;
-        this.isRecording = false;
+        this.recognition = null;  // Will hold the speech recognition object
+        this.isRecording = false;  //Track id Recording is Active
 
         // Set up speech recognition functionality
         this.setupSpeechRecognition();
