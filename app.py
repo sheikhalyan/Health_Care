@@ -9,8 +9,6 @@ load_dotenv()
 
 # Initialize Flask app
 app = Flask(__name__)
-
-# Configure secret key for Flask sessions (fallback to default if not in .env)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'your-secret-key')
 
 # Dictionary for supported languages
@@ -30,7 +28,7 @@ SUPPORTED_LANGUAGES = {
 # Initialize the Google Translate API
 translator = Translator()
 
-# Function to perform translations using Google Translate
+# Translation function
 def get_medical_translation(text, source_lang, target_lang):
     try:
         translation = translator.translate(text, src=source_lang, dest=target_lang)
@@ -43,7 +41,7 @@ def get_medical_translation(text, source_lang, target_lang):
 def index():
     return render_template('index.html', languages=SUPPORTED_LANGUAGES)
 
-# Translation API route (POST request)
+# Translation API route (POST)
 @app.route('/translate', methods=['POST'])
 def translate_text():
     try:
