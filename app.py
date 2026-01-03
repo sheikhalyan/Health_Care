@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, jsonify
+from flask_socketio import SocketIO, emit
 import os
 from dotenv import load_dotenv
 from googletrans import Translator
@@ -11,7 +12,10 @@ load_dotenv()
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'your-secret-key')
 
-# Dictionary for supported languages
+# Initialize SocketIO for real-time communication
+socketio = SocketIO(app, cors_allowed_origins="*")  # "*" allows any origin
+
+# Supported languages
 SUPPORTED_LANGUAGES = {
     'en': 'English',
     'es': 'Spanish',
@@ -25,10 +29,10 @@ SUPPORTED_LANGUAGES = {
     'ru': 'Russian'
 }
 
-# Initialize the Google Translate API
+# Initialize Google Translate
 translator = Translator()
 
-# Translation function
+# Function to translate text
 def get_medical_translation(text, source_lang, target_lang):
     try:
         translation = translator.translate(text, src=source_lang, dest=target_lang)
@@ -41,21 +45,21 @@ def get_medical_translation(text, source_lang, target_lang):
 def index():
     return render_template('index.html', languages=SUPPORTED_LANGUAGES)
 
-# Translation API route (POST)
-@app.route('/translate', methods=['POST'])
-def translate_text():
+# WebSocket event for real-time translation
+@socketio.on('translate_text')
+def handle_translation(data):
     try:
-        data = request.json
         text = data.get('text', '').strip()
         source_lang = data.get('source_lang')
         target_lang = data.get('target_lang')
 
         if not text:
-            return jsonify({'error': 'Empty text provided'}), 400
+            emit('translation_error', {'error': 'Empty text provided'})
+            return
 
         translation = get_medical_translation(text, source_lang, target_lang)
 
-        return jsonify({
+        emit('translation_response', {
             'original_text': text,
             'translated_text': translation,
             'source_lang': source_lang,
@@ -64,4 +68,9 @@ def translate_text():
         })
 
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        emit('translation_error', {'error': str(e)})
+
+# Run locally
+if __name__ == '__main__':
+    # Use socketio.run() for WebSocket support
+    socketio.run(app, host='0.0.0.0', port=5000, debug=True)
