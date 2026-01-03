@@ -77,5 +77,5 @@ def handle_translation(data):
         emit('translation_error', {'error': str(e)})
 
 # Main entry point for the application
-if __name__ == '__main__':
-    socketio.run(app, debug=True)  # Run the app with SocketIO support in debug mode
+# if __name__ == '__main__':
+#     socketio.run(app, debug=True)  # Run the app with SocketIO support in debug mode
