@@ -13,9 +13,9 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'your-secret-key')
 
 # Initialize SocketIO for real-time communication
-#socketio = SocketIO(app, cors_allowed_origins="*")  # "*" allows any origin   # old
+socketio = SocketIO(app, cors_allowed_origins="*")
 
-socketio = SocketIO(app, cors_allowed_origins="*", async_mode='threading')
+
 
 
 
