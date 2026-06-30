@@ -27,8 +27,8 @@ This project explores two different translation backends, implemented on separat
 
 | Branch | Translation Engine | Notes |
 |--------|---------------------|-------|
-| `main` | **OpenAI API** (`gpt-3.5-turbo`) | Context-aware medical translation — understands terminology, tone, and cultural nuance. Requires a paid OpenAI subscription for unrestricted use. |
-| *(secondary branch)* | **Google Translate API** | Faster, free-tier friendly, but lacks the medical-context awareness of the LLM-based approach |
+| `master` | **OpenAI API** (`gpt-3.5-turbo`) | Context-aware medical translation — understands terminology, tone, and cultural nuance. Requires a paid OpenAI subscription for unrestricted use. |
+| `GoogletransAPI` | **Google Translate API** | Faster, free-tier friendly, but lacks the medical-context awareness of the LLM-based approach |
 
 > The OpenAI-powered branch represents the more advanced implementation — it doesn't just translate words, it adapts medical terminology and tone appropriately for clinical communication.
 
@@ -133,8 +133,8 @@ healthcare-translation-app/
 
 1. Clone the repository
    ```bash
-   git clone https://github.com/sheikhalyan/healthcare-translation-app.git
-   cd healthcare-translation-app
+   git clone https://github.com/sheikhalyan/Health_Care.git
+   cd HealthCare
    ```
 
 2. Create a virtual environment and install dependencies
@@ -164,7 +164,7 @@ healthcare-translation-app/
 To try the Google Translate API implementation instead of OpenAI:
 
 ```bash
-git checkout <google-translate-branch-name>
+git checkout GoogletransAPI
 ```
 
 This branch swaps the OpenAI translation call for the Google Translate API — useful for comparing cost, latency, and translation quality between an LLM-based approach and a traditional translation API.
